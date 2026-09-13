@@ -144,6 +144,22 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ]);
 
+  void marcarTodosPresentes() {
+    setState(() {
+      for (int i = 0; i < alumnos.length; i++) {
+        alumnos[i] = alumnos[i].copyWith(asistencia: true);
+      }
+    });
+  }
+
+  void marcarTodosAusentes() {
+    setState(() {
+      for (int i = 0; i < alumnos.length; i++) {
+        alumnos[i] = alumnos[i].copyWith(asistencia: false);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -162,74 +178,112 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: ListView.builder(
-        itemCount: alumnos.length,
-        itemBuilder: (context, index) {
-          final alumno = alumnos[index];
-          final colorFondo = alumno.asistencia ? Colors.green.shade50 : Colors.red.shade50;
-          final colorBorde = alumno.asistencia ? Colors.green : Colors.red;
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: marcarTodosPresentes,
+                    icon: const Icon(Icons.check),
+                    label: const Text('Todos presentes'),
+                  ),
+                ),
 
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Card(
-              color: colorFondo,
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: colorBorde, width: 1.5),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: colorBorde,
-                      child: Text(
-                        alumno.nombre.substring(0, 1),
-                        style: const TextStyle(color: Colors.white),
-                      ),
+                const SizedBox(width: 12),
+
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: marcarTodosAusentes,
+                    icon: const Icon(Icons.close),
+                    label: const Text('Todos ausentes'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: ListView.builder(
+              itemCount: alumnos.length,
+              itemBuilder: (context, index) {
+                final alumno = alumnos[index];
+                final colorFondo = alumno.asistencia
+                    ? Colors.green.shade50
+                    : Colors.red.shade50;
+                final colorBorde = alumno.asistencia
+                    ? Colors.green
+                    : Colors.red;
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  child: Card(
+                    color: colorFondo,
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(color: colorBorde, width: 1.5),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
                         children: [
-                          Text(
-                            alumno.nombre,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                          CircleAvatar(
+                            backgroundColor: colorBorde,
+                            child: Text(
+                              alumno.nombre.substring(0, 1),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          Text('Carnet: ${alumno.carnet}'),
-                          const SizedBox(height: 6),
-                          Text(
-                            alumno.asistencia ? 'Presente' : 'Ausente',
-                            style: TextStyle(
-                              color: colorBorde,
-                              fontWeight: FontWeight.bold,
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  alumno.nombre,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text('Carnet: ${alumno.carnet}'),
+                                const SizedBox(height: 6),
+                                Text(
+                                  alumno.asistencia ? 'Presente' : 'Ausente',
+                                  style: TextStyle(
+                                    color: colorBorde,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
+                          Switch(
+                            value: alumno.asistencia,
+                            onChanged: (bool value) {
+                              setState(() {
+                                alumnos[index] = alumno.copyWith(
+                                  asistencia: value,
+                                );
+                              });
+                            },
                           ),
                         ],
                       ),
                     ),
-                    Switch(
-                      value: alumno.asistencia,
-                      onChanged: (bool value) {
-                        setState(() {
-                          alumnos[index] = alumno.copyWith(asistencia: value);
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
-          );
-        },
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+          ),
+        ],
       ),
     );
   }
