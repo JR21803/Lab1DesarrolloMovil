@@ -6,26 +6,26 @@ void main() {
 }
 
 @Preview(name: 'Laboratorio 1')
-Widget myAppPreview()=> const MyApp();
+Widget myAppPreview() => const MyApp();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Control de asistencia',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 178, 101)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 0, 178, 101),
+        ),
       ),
       home: const MyHomePage(title: 'Grupo 8 - Control de asistencia'),
     );
   }
 }
 
-
-// Datos alumnos 
+// Datos alumnos
 
 class Alumno {
   final String id;
@@ -40,7 +40,7 @@ class Alumno {
     required this.asistencia,
   });
 
-  Alumno copyWith ({bool? asistencia}){
+  Alumno copyWith({bool? asistencia}) {
     return Alumno(
       id: id,
       nombre: nombre,
@@ -49,22 +49,6 @@ class Alumno {
     );
   }
 }
-
-final List<Alumno> alumnos = ([
-  const Alumno(id: '1', nombre: 'José Avilés', carnet: '20245984', asistencia: false),
-  const Alumno(id: '2', nombre: 'Roberto Rosales', carnet: '20245894', asistencia: false),
-  const Alumno(id: '3', nombre: 'Samuel Merino', carnet: '20245356', asistencia: false),
-  const Alumno(id: '4', nombre: 'Antonio Pineda', carnet: '20245653', asistencia: false),
-  const Alumno(id: '5', nombre: 'Carlos Cruz', carnet: '20245535', asistencia: false),
-  const Alumno(id: '6', nombre: 'Antonio Méndez', carnet: '20245355', asistencia: false),
-  const Alumno(id: '7', nombre: 'Adrián López', carnet: '20245259', asistencia: false),
-  const Alumno(id: '8', nombre: 'Samuel Pimentel', carnet: '20245952', asistencia: false),
-  const Alumno(id: '9', nombre: 'Diego Viscarra', carnet: '20245300', asistencia: false),
-  const Alumno(id: '10', nombre: 'Alejandro Pineda', carnet: '20245030', asistencia: false),
-  const Alumno(id: '11', nombre: 'Carlos Llanes', carnet: '20245303', asistencia: false),
-  const Alumno(id: '12', nombre: 'Samuel Cornejo', carnet: '20245033', asistencia: false),
-]);
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -85,18 +69,80 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<Alumno> alumnos = ([
+    const Alumno(
+      id: '1',
+      nombre: 'José Avilés',
+      carnet: '20245984',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '2',
+      nombre: 'Roberto Rosales',
+      carnet: '20245894',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '3',
+      nombre: 'Samuel Merino',
+      carnet: '20245356',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '4',
+      nombre: 'Antonio Pineda',
+      carnet: '20245653',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '5',
+      nombre: 'Carlos Cruz',
+      carnet: '20245535',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '6',
+      nombre: 'Antonio Méndez',
+      carnet: '20245355',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '7',
+      nombre: 'Adrián López',
+      carnet: '20245259',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '8',
+      nombre: 'Samuel Pimentel',
+      carnet: '20245952',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '9',
+      nombre: 'Diego Viscarra',
+      carnet: '20245300',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '10',
+      nombre: 'Alejandro Pineda',
+      carnet: '20245030',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '11',
+      nombre: 'Carlos Llanes',
+      carnet: '20245303',
+      asistencia: false,
+    ),
+    const Alumno(
+      id: '12',
+      nombre: 'Samuel Cornejo',
+      carnet: '20245033',
+      asistencia: false,
+    ),
+  ]);
 
   @override
   Widget build(BuildContext context) {
@@ -116,37 +162,74 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body: ListView.builder(
+        itemCount: alumnos.length,
+        itemBuilder: (context, index) {
+          final alumno = alumnos[index];
+          final colorFondo = alumno.asistencia ? Colors.green.shade50 : Colors.red.shade50;
+          final colorBorde = alumno.asistencia ? Colors.green : Colors.red;
+
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Card(
+              color: colorFondo,
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(color: colorBorde, width: 1.5),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: colorBorde,
+                      child: Text(
+                        alumno.nombre.substring(0, 1),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            alumno.nombre,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text('Carnet: ${alumno.carnet}'),
+                          const SizedBox(height: 6),
+                          Text(
+                            alumno.asistencia ? 'Presente' : 'Ausente',
+                            style: TextStyle(
+                              color: colorBorde,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Switch(
+                      value: alumno.asistencia,
+                      onChanged: (bool value) {
+                        setState(() {
+                          alumnos[index] = alumno.copyWith(asistencia: value);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
